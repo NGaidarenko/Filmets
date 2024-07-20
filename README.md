@@ -25,25 +25,49 @@ POST /api/auth/register - Регистрация нового пользоват
 POST /api/auth/login - Вход в систему (получение JWT токена)
 
 ### Фильмы
-GET /api/movies - Получение списка всех фильмов
+GET /movies/movies - Получение списка всех фильмов
 
-GET /api/movies/search?query={query} - Поиск фильмов по названию
+GET /movies/{movieId} - Поиск фильмов по Id
 
-GET /api/movies/filter - Фильтрация фильмов по жанру, длительности и дате выхода
+POST /movies/movie - Добавление фильма
 
-POST /api/movies - Создание нового фильма (требуется роль ADMIN)
+PUT /movies/{movieId} - Обнавление данных о фильме
 
-PUT /api/movies/{id} - Обновление информации о фильме (требуется роль ADMIN)
+DELET /movies/{movieId} - Удаление фильма по Id
+
+GET /movies/byTitle - Получение фильма по названию
+
+GET /movies/orderByDate - Сортировка фильмов по названию
+
+GET /movies/orderByDuration - Сортировка по длительности
+
+GET /movies/getByGenre/{genre} - Получение данных по жанру
 
 ### Сеансы
-GET /api/screenings/movie/{movieId} - Получение списка сеансов для фильма
+GET /screening - Получение списка сеансов
 
-POST /api/screenings - Создание нового сеанса (требуется роль ADMIN)
+GET /screening/{screeningId} - Получение сеанса по Id
 
-PUT /api/screenings/{id} - Обновление информации о сеансе (требуется роль ADMIN)
+GET /screening/{movieTitle} - Получение сеанса по названию фильма 
+
+POST /screening/create - Создание сеанса
+
+PUT /screening/{screeningId} - Обновление информации о сеансе
+
+DELETE /screening/{screeningId} - Удаление сеанса по Id
 
 ### Билеты
-POST /api/tickets/buy - Покупка билета на сеанс
+GET /ticket/{ticketId} - Получение билета по Id
+
+POST /ticket/create - Создание билета на сеанс
+
+DELETE /ticket/{ticketId} - Удаление билета по Id
+
+### Регестрация
+
+POST /auth/signup - Регестрация пользователя
+
+POST /auth/signin - Авторизация пользователя
 
 
 ## Безопасность
