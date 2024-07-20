@@ -18,12 +18,12 @@ public class JwtCore {
     public String generateToken(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder().setSubject(userDetails.getUsername()).setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + lifetime))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(new Date((new Date().getTime()) + lifetime))
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     public String getNameFromJwt(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).setAllowedClockSkewSeconds(3600000).parseClaimsJws(token).getBody().getSubject();
     }
 }

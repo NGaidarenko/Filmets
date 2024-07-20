@@ -14,9 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/auth")
+@RestController
+@RequestMapping("/auth")
 public class SecurityController {
 
     @Autowired
@@ -25,40 +27,39 @@ public class SecurityController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private AuthenticationManager authenticationManager;
-
     @Autowired
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtCore jwtCore;
 
-    @PostMapping("/singin")
-    public ResponseEntity<?> singIn(@RequestBody UserRequest userRequest) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> singUp(@RequestBody UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different username");
         }
+
         User user = new User();
         user.setUsername(userRequest.getUsername());
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setEmail(userRequest.getEmail());
+
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success bro !!!");
     }
 
 
-    @PostMapping("/singup")
-    public ResponseEntity<?> singUp(@RequestBody UserRequest userRequest) {
+    public @PostMapping("/signin")
+    ResponseEntity<?> singIn(@RequestBody UserRequest userRequest) {
         Authentication authentication = null;
         try {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtCore.generateToken(authentication);
-        return ResponseEntity.ok(jwtCore);
+        String jwt = jwtCore.generateToken(authentication);
+        return ResponseEntity.ok(jwt);
     }
 
 }

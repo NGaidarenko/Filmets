@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,10 @@ import java.io.IOException;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
+    @Autowired
     private JwtCore jwtCore;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
@@ -34,7 +38,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 try {
                     username = jwtCore.getNameFromJwt(jwt);
                 } catch (Exception e){
-
+                    logger.error("JWT Token processing error: ", e);
                 }
             }
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

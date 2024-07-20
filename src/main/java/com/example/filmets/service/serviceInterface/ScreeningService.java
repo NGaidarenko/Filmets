@@ -11,7 +11,7 @@ import java.util.List;
 public interface ScreeningService {
     List<Screening> getAllScreenings();
     Screening getScreeningById(int id);
-    List<Screening> getScreeningByMovie(Movie movie);
+    List<Screening> getScreeningByMovieTitle(String movieTitle);
     Screening updateScreening(ScreeningRequest screeningRequest, int id);
     Screening saveScreening(ScreeningRequest screeningRequest);
     void deleteScreeningById(int id);

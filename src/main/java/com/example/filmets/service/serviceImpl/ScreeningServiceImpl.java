@@ -34,8 +34,8 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     //Обработать ошибку, если не будет фильма с Id
     @Override
-    public List<Screening> getScreeningByMovie(Movie movie) {
-        movie = movieRepository.findById(movie.getId()).orElseThrow(() -> new NoSuchElementException("No screening found with some Movie"));
+    public List<Screening> getScreeningByMovieTitle(String movieTitle) {
+        Movie movie = movieRepository.findByTitle(movieTitle);
         return screeningRepository.findScreeningByMovie(movie);
     }
 

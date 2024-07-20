@@ -27,17 +27,15 @@ public class ScreeningController {
         return new ResponseEntity<>(screeningService.getScreeningById(screeningId), HttpStatus.OK);
     }
 
-    @GetMapping("/screening/{movieId}")
-    public ResponseEntity<List<Screening>> getScreeningByMovieId(@PathVariable int movieId){
-        Movie movie = new Movie();
-        movie.setId(movieId);
-        List<Screening> screeningList = screeningService.getScreeningByMovie(movie);
+    @GetMapping("/screening/{movieTitle}")
+    public ResponseEntity<List<Screening>> getScreeningByMovieTitle(@PathVariable String movieTitle){
+        List<Screening> screeningList = screeningService.getScreeningByMovieTitle(movieTitle);
 
         return new ResponseEntity<>(screeningList, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Screening> createScreening(@RequestBody ScreeningRequest screeningRequest){
+    public ResponseEntity<Screening> createScreening(@RequestBody ScreeningRequest screeningRequest) {
         return new ResponseEntity<>(screeningService.saveScreening(screeningRequest), HttpStatus.CREATED);
     }
 
